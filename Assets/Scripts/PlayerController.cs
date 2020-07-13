@@ -6,13 +6,14 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public Vector2 velocity;
-    public Rigidbody2D rigidbody;
-    public Camera mainCamera;
+
+    [SerializeField]
+    private Rigidbody2D rigidBody;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -26,6 +27,6 @@ public class PlayerController : MonoBehaviour
         velocity.x = Input.GetAxis("Horizontal");
         velocity.y = Input.GetAxis("Vertical");
 
-        rigidbody.AddForce(velocity * speed);
+        rigidBody.AddForce(velocity * speed);
     }
 }
