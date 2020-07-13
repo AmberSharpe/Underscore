@@ -5,15 +5,31 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
-    public Vector2 velocity;
+    public Vector2 moveDirection;
+    private bool jump;
+    private float horizontalInput;
+    private float verticalInput;
 
     [SerializeField]
-    private Rigidbody2D rigidBody;
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        CollectInput();
+    }
+
+    private void CollectInput()
+    {
+        jump = Input.GetButtonDown("Jump");
+
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
     }
 
     // Update is called once per frame
@@ -24,9 +40,14 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        velocity.x = Input.GetAxis("Horizontal");
-        velocity.y = Input.GetAxis("Vertical");
 
-        rigidBody.AddForce(velocity * speed);
+
+        rb.velocity += moveDirection * speed * Time.deltaTime;
+
+        if (jump)
+        {
+            Debug.Log("Jump!");
+        }
+
     }
 }
