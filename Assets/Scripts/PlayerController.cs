@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-enum state
+[SerializeField]
+enum State
 {
     Solid,Liquid,Gas
 }
@@ -15,7 +16,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
 
     //State
-    state currentState = state.Solid;
+    [SerializeField]
+    State currentState = State.Solid;
+
+    //Gravity
+    public float gravity = -10;
 
     //Limits
     public float solidJumpHeight = 10;
@@ -67,19 +72,19 @@ public class PlayerController : MonoBehaviour
 
     switch (currentState)
     {                
-            case state.Solid://Solid                              
+            case State.Solid://Solid                              
                 moveDirection = (Vector3.right * horizontalInput).normalized;
                 moveDirectionMag = Mathf.Clamp01(Mathf.Abs(horizontalInput));
 
                 if (jump)
-                {
-                    Debug.Log("Jump!");
-                    rb.velocity += Vector2.up * rb.mass * Mathf.Sqrt(2 * Physics.gravity.magnitude * solidJumpHeight);
+                {                 
+                    rb.velocity += Vector2.up * rb.mass * Mathf.Sqrt(2 * Mathf.Abs(gravity) * solidJumpHeight);
                 }
 
-                //Apply force
+                //Apply forces
                 rb.velocity += baseMoveAcceleration * moveDirection * moveDirectionMag * Time.deltaTime;
-               
+                rb.velocity += Vector2.up * gravity * Time.deltaTime;
+
                 //Clamp Speed
                 rb.velocity = new Vector2(
                     Mathf.Clamp(rb.velocity.x,-solidMaxHorizontalSpeed,solidMaxHorizontalSpeed), 
@@ -87,7 +92,7 @@ public class PlayerController : MonoBehaviour
                     );
                 break;     
 
-            case state.Liquid: //Liquid                                      
+            case State.Liquid: //Liquid                                      
                 moveDirection = (Vector3.right * horizontalInput).normalized;
                 moveDirectionMag = Mathf.Clamp01(Mathf.Abs(horizontalInput));
 
@@ -101,7 +106,7 @@ public class PlayerController : MonoBehaviour
                     );
                 break;      
                 
-            case state.Gas://Gas                               
+            case State.Gas://Gas                               
                 moveDirection = (Vector3.right * horizontalInput + Vector3.up * verticalInput).normalized;
                 moveDirectionMag = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
 
