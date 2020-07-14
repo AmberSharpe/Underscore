@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputCapture : MonoBehaviour
 {
-    public EntityController targetEntity;
+    //public EntityController targetEntity;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +20,6 @@ public class InputCapture : MonoBehaviour
 
     void CollectInput()
     {
-        targetEntity.jump = Input.GetButtonDown("Jump");
+        //targetEntity.jump = Input.GetButtonDown("Jump");
     }
 }
